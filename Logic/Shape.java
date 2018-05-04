@@ -35,7 +35,7 @@ public class Shape {
 
     public Tile [] fall(){
         Tile [] temp = new Tile[tiles.length];
-        for(int i=0;i<tiles.length;i++){
+        for(int i=0;i<temp.length;i++){
             temp[i] = new Tile(tiles[i].getColor(), tiles[i].getxPos(), tiles[i].getyPos() + 1);
         }
         return temp;
@@ -43,14 +43,22 @@ public class Shape {
 
 
 
-    public void rotate(int dir){
+    public Tile [] rotate(int dir){
+        Tile [] temp = new Tile[tiles.length];
         rotation += dir;
         if(rotation < 0){
             rotation = 3;
         } else if(rotation > 3){
             rotation = 0;
         }
-        tiles = patterns[rotation];
+        Tile o = getOrigin();
+        for(int i =0;i<temp.length;i++){
+            temp[i] = new Tile(patterns[rotation][i].getColor(), patterns[rotation][i].getxPos() + o.getxPos() - 1,
+                    patterns[rotation][i].getyPos() + o.getyPos() - 1);
+            //temp[i].setxPos(o.getxPos() + patterns[rotation][i].getxPos());
+            //temp[i].setyPos(o.getyPos() + patterns[rotation][i].getyPos());
+        }
+        return temp;
     }
 
     public void render(GraphicsContext gc){

@@ -14,6 +14,8 @@ public class Game implements Runnable{
     private Shape shape;
     private Tile origin;
 
+    private static boolean [] keys = new boolean[6];
+
     public static int maxHeight = 3; //okresla jak wysoko  od gory gracz moze klasc jeszcze klocki
 
     public Game(GraphicsContext gc) {
@@ -40,39 +42,48 @@ public class Game implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                for(int j=0;j < GameController.keys.length;j++){
-                    System.out.println(GameController.keys[0]);
-                    if(GameController.keys[0]){ //lewo
+                for(int j=0;j < keys.length;j++){
+                    if(keys[0]){ //lewo
                         System.out.println("lewo");
-                        if( !board.collides(shape.getTiles(), shape.move(-1))){
+                        if( !board.collides(shape.move(-1))){
                             shape.setTiles(shape.move(-1));
                         }
+                        keys[0] = false;
                     }
-                    else if(GameController.keys[1]){ //prawo
-                        if( !board.collides(shape.getTiles(), shape.move(1))){
+                    else if(keys[1]){ //prawo
+                        System.out.println("prawo");
+                        if( !board.collides(shape.move(1))){
                             shape.setTiles(shape.move(1));
                         }
+                        keys[1] = false;
                     }
-                    else if(GameController.keys[2]){ //esc
-
+                    else if(keys[2]){ //esc
+                        keys[2] = false;
                     }
-                    else if(GameController.keys[3]){ //spacja
-
+                    else if(keys[3]){ //spacja
+                        keys[3] = false;
                     }
-                    else if(GameController.keys[4]){ //obrot w prawo
-
+                    else if(keys[4]){ //obrot w prawo
+                        System.out.println("obrot w prawo");
+                        if( !board.collides(shape.rotate(1))){
+                            shape.setTiles(shape.rotate(1));
+                        }
+                        keys[4] = false;
                     }
-                    else if(GameController.keys[5]){ //obrot w lewo
-
+                    else if(keys[5]){ //obrot w lewo
+                        System.out.println("obrot w lewo");
+                        if( !board.collides(shape.rotate(-1))){
+                            shape.setTiles(shape.rotate(-1));
+                        }
+                        keys[5] = false;
                     }
                 }
             }
 
-            //System.out.print("x");
-            if(board.collides(shape.getTiles(), shape.fall())){
+            if(board.collides(shape.fall())){
                 board.fixShapeToTheBoard(shape.getTiles());
                 shape = generateRandomShape(origin);
-                System.out.println(shape.getTiles()[0].getxPos());
+                //System.out.println(shape.getTiles()[0].getxPos());
             } else {
                shape.setTiles(shape.fall());
             }
@@ -80,10 +91,15 @@ public class Game implements Runnable{
                 System.out.println("Koniec gry");
                 stop();
             }
+            //points += board.clearRows();
+
         }
         stop();
     }
 
+    public void handleInput(int in){
+        keys[in-1] = true;
+    }
 
     public synchronized void start(){
         if(isRunning == true){
@@ -144,5 +160,14 @@ public class Game implements Runnable{
                 default:
                     return new ZShape(0, origin);
         }
+    }
+
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 }
