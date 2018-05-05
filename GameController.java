@@ -42,12 +42,13 @@ public class GameController {
     private void handleStartButton(){ //odpalanie gry
         gc = gameCanvas.getGraphicsContext2D();
         if(game == null){
-            game = new Game(gc);
+            game = new Game(gc, this);
         }
-        textPoints.setText("Points: 0");
         game.start();
-    }
 
+
+        
+    }
 
 
     @FXML
@@ -62,7 +63,7 @@ public class GameController {
             else if(key.getCode() == KeyCode.ESCAPE){
                 game.handleInput(3);
             }
-            else if(key.getCode() == KeyCode.SPACE){
+            else if(key.getCode() == KeyCode.M){
                 game.handleInput(4);
             }
             else if(key.getCode() == KeyCode.W){
@@ -72,6 +73,10 @@ public class GameController {
                 game.handleInput(6);
             }
         });
+    }
+
+    public void setPoints(int points){
+        textPoints.setText("Points: " + points);
     }
 
 }

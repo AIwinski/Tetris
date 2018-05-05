@@ -2,6 +2,7 @@ package sample.Logic;
 
 import javafx.scene.canvas.GraphicsContext;
 import sample.GameController;
+import sample.Logic.Shapes.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -9,17 +10,23 @@ public class Game implements Runnable{
     private Board board;
     private Thread thread;
     private GraphicsContext gc;
-    private boolean isRunning = false;
+    private volatile boolean isRunning = false;
     private int points;
     private Shape shape;
     private Tile origin;
+    private GameController controller;
+    int speed;
+
 
     private static boolean [] keys = new boolean[6];
 
     public static int maxHeight = 3; //okresla jak wysoko  od gory gracz moze klasc jeszcze klocki
 
-    public Game(GraphicsContext gc) {
+    public Game(GraphicsContext gc, GameController controller) {
+        this.points = 0;
         this.gc = gc;
+        this.controller = controller;
+        speed = 50;
     }
 
     public boolean isRunning() {
@@ -36,7 +43,7 @@ public class Game implements Runnable{
         while (isRunning){
             tick();
             render(gc);
-            for(int i = 0;i<20; i++){
+            for(int i = 0;i<speed; i++){
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
@@ -61,12 +68,16 @@ public class Game implements Runnable{
                         keys[2] = false;
                     }
                     else if(keys[3]){ //spacja
+                        while(!board.collides(shape.fall())){
+                            shape.setTiles(shape.fall());
+                        }
                         keys[3] = false;
                     }
                     else if(keys[4]){ //obrot w prawo
                         System.out.println("obrot w prawo");
                         if( !board.collides(shape.rotate(1))){
                             shape.setTiles(shape.rotate(1));
+                            shape.setRotation(shape.getRotation() + 1);
                         }
                         keys[4] = false;
                     }
@@ -74,6 +85,7 @@ public class Game implements Runnable{
                         System.out.println("obrot w lewo");
                         if( !board.collides(shape.rotate(-1))){
                             shape.setTiles(shape.rotate(-1));
+                            shape.setRotation(shape.getRotation() - 1);
                         }
                         keys[5] = false;
                     }
@@ -89,12 +101,14 @@ public class Game implements Runnable{
             }
             if(board.checkIfGameFinished()){
                 System.out.println("Koniec gry");
-                stop();
+                return;
             }
-            //points += board.clearRows();
+            points += board.clearRows();
+            controller.setPoints(points);
 
         }
-        stop();
+        System.out.println("konec");
+        return;
     }
 
     public void handleInput(int in){
@@ -115,13 +129,7 @@ public class Game implements Runnable{
         if (isRunning == false){
             return;
         }
-        System.out.println("stop");
         isRunning = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e){
-            e.printStackTrace();
-        }
     }
 
     private void init(){
@@ -170,4 +178,5 @@ public class Game implements Runnable{
     public void setPoints(int points) {
         this.points = points;
     }
+
 }

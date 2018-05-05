@@ -73,31 +73,25 @@ public class Board {
     }
 
     public int clearRows(){
-        boolean [] result = new boolean[getHeight()];
-        boolean emptyRow = true;
-        for(int i=getHeight()-1;i>=0;i--){
-            for(int j=0;j<getWidth();j++){
-                if(tiles[j][i].getColor() == emptyTile){
+        boolean emptyRow;
+        int p = 0;
+        for(int i=getHeight() - 2;i>1;i--) {
+            emptyRow = true;
+            for (int j = 1; j < getWidth() - 1; j++) {
+                if (tiles[j][i].getColor() == emptyTile) {
                     emptyRow = false;
                 }
             }
-            if(emptyRow){
-                result[i] = true;
-            }
-        }
-        for(int i=0;i<result.length;i++){
-            if(result[i]){
-                for(int j=i;j<getHeight()-1;j++){
-                    for(int k=0;k<getWidth();k++){
-                        tiles[j][k].setColor(tiles[j+1][k].getColor());
+            if (emptyRow) {
+                p++;
+                for(int k=i; k>1; k--){
+                    for(int h=1; h<getWidth()-1;h++){
+                        tiles[h][k].setColor(tiles[h][k-1].getColor());
                     }
                 }
             }
         }
-        for(int i=0;i<getWidth();i++){
-            tiles[i][getHeight()-1].setColor(emptyTile);
-        }
-        return result.length * 10; // user get 10 points for every cleared row
+        return p * 10; // user get 10 points for every cleared row
     }
 
 

@@ -8,13 +8,11 @@ public class Shape {
     protected Tile [] tiles;
     protected Tile origin;
     protected int rotation;
-    protected Tile [][] patterns;
+    private Tile [][] patterns;
 
     public Shape(Tile origin, int rotation) {
-        //this.tiles = tiles;
         this.origin = origin;
         this.rotation = rotation;
-        //this.patterns = patterns;
     }
 
     public void set(Tile origin){
@@ -45,6 +43,7 @@ public class Shape {
 
     public Tile [] rotate(int dir){
         Tile [] temp = new Tile[tiles.length];
+        int rotation = this.rotation;
         rotation += dir;
         if(rotation < 0){
             rotation = 3;
@@ -55,8 +54,6 @@ public class Shape {
         for(int i =0;i<temp.length;i++){
             temp[i] = new Tile(patterns[rotation][i].getColor(), patterns[rotation][i].getxPos() + o.getxPos() - 1,
                     patterns[rotation][i].getyPos() + o.getyPos() - 1);
-            //temp[i].setxPos(o.getxPos() + patterns[rotation][i].getxPos());
-            //temp[i].setyPos(o.getyPos() + patterns[rotation][i].getyPos());
         }
         return temp;
     }
@@ -98,6 +95,12 @@ public class Shape {
     }
 
     public void setRotation(int rotation) {
-        this.rotation = rotation;
+        if(rotation < 0){
+            this.rotation = 3;
+        } else if(rotation > 3){
+            this.rotation = 0;
+        } else {
+            this.rotation = rotation;
+        }
     }
 }

@@ -3,7 +3,7 @@ package sample.Logic;
 import javafx.scene.paint.Color;
 
 public class Tile {
-    public static final int size = 12;
+    public static final int size = 16;
 
     private Color color;
     private int xPos;
