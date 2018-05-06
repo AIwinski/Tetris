@@ -8,13 +8,21 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    FXMLLoader loader;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("mainmenu.fxml"));
-        primaryStage.setTitle("Hello World");
+        loader = new FXMLLoader(
+                getClass().getResource(
+                        "mainmenu.fxml"
+                )
+        );
+        Parent root = loader.load();
+        primaryStage.setTitle("Tetris :)");
         primaryStage.setScene(new Scene(root, 250, 500));
         primaryStage.show();
     }
+
 
 
     public static void main(String[] args) {
