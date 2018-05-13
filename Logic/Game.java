@@ -85,7 +85,7 @@ public class Game implements Runnable{
                         keys[3] = false;
                     }
                     else if(keys[4]){ //obrot w prawo
-                        System.out.println("obrot w prawo");
+                        //System.out.println("obrot w prawo");
                         if( !board.collides(shape.rotate(1))){
                             shape.setTiles(shape.rotate(1));
                             shape.setRotation(shape.getRotation() + 1);
@@ -93,7 +93,7 @@ public class Game implements Runnable{
                         keys[4] = false;
                     }
                     else if(keys[5]){ //obrot w lewo
-                        System.out.println("obrot w lewo");
+                        //System.out.println("obrot w lewo");
                         if( !board.collides(shape.rotate(-1))){
                             shape.setTiles(shape.rotate(-1));
                             shape.setRotation(shape.getRotation() - 1);
