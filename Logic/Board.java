@@ -41,10 +41,6 @@ public class Board {
             }
         }
         for(int i=0;i<nextPos.length;i++){
-            //System.out.println("x: " + nextPos[i].getxPos() + " y: " + nextPos[i].getyPos());
-//            if(nextPos[i].getxPos() < 0 || nextPos[i].getxPos() > getWidth() - 1 || nextPos[i].getyPos() < 0 || nextPos[i].getyPos() > getHeight() - 1){
-//                return true;
-//            }
             if(tiles[nextPos[i].getxPos()][nextPos[i].getyPos()].getColor() != emptyTile){
                 return true;
             }
@@ -104,23 +100,12 @@ public class Board {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
 
     public int getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public Tile[][] getTiles() {
         return tiles;
-    }
-
-    public void setTiles(Tile[][] tiles) {
-        this.tiles = tiles;
     }
 }

@@ -15,8 +15,12 @@ public class LShape extends Shape {
 
     public LShape(int rotation, Tile origin) {
         super(origin, rotation);
-        this.setPatterns(patterns);
-        this.setTiles(patterns[rotation]);
+        super.setPatterns(patterns);
+        Tile [] temp = new Tile[patterns[rotation].length];
+        for(int i=0;i<temp.length;i++){
+            temp[i] = new Tile(patterns[rotation][i].getColor(), patterns[rotation][i].getxPos(), patterns[rotation][i].getyPos());
+        }
+        this.setTiles(temp);
         set(origin);
     }
 }

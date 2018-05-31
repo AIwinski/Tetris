@@ -17,8 +17,8 @@ public class Shape {
 
     public void set(Tile origin){
         for(int i =0;i<tiles.length;i++){
-            tiles[i].setxPos(origin.getxPos() + tiles[i].getxPos());
-            tiles[i].setyPos(origin.getyPos() + tiles[i].getyPos());
+            tiles[i].setxPos(origin.getxPos() + patterns[rotation][i].getxPos());
+            tiles[i].setyPos(origin.getyPos() + patterns[rotation][i].getyPos());
         }
     }
 
@@ -43,20 +43,20 @@ public class Shape {
 
     public Tile [] rotate(int dir){
         Tile [] temp = new Tile[tiles.length];
-        int rotation = this.rotation;
-        rotation += dir;
-        if(rotation < 0){
-            rotation = 3;
-        } else if(rotation > 3){
-            rotation = 0;
-        }
         Tile o = getOrigin();
+        int rot = this.rotation + dir;
+        if(rot > 3){
+            rot = 0;
+        } else if(rot < 0){
+            rot = 3;
+        }
         for(int i =0;i<temp.length;i++){
-            temp[i] = new Tile(patterns[rotation][i].getColor(), patterns[rotation][i].getxPos() + o.getxPos() - 1,
-                    patterns[rotation][i].getyPos() + o.getyPos() - 1);
+            temp[i] = new Tile(patterns[rot][i].getColor(), patterns[rot][i].getxPos() + o.getxPos()-1,
+                    patterns[rot][i].getyPos() + o.getyPos()-1);
         }
         return temp;
     }
+
 
     public void render(GraphicsContext gc){
         gc.setFill(getTiles()[0].getColor());
@@ -66,9 +66,6 @@ public class Shape {
     }
 
 
-    public Tile[][] getPatterns() {
-        return patterns;
-    }
 
     public void setPatterns(Tile[][] patterns) {
         this.patterns = patterns;
@@ -84,10 +81,6 @@ public class Shape {
 
     public Tile getOrigin() {
         return tiles[1];
-    }
-
-    public void setOrigin(Tile origin) {
-        this.origin = origin;
     }
 
     public int getRotation() {

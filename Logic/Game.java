@@ -24,6 +24,7 @@ public class Game implements Runnable{
     int speed;
 
     List<Score> highscores;
+    private final int RATE = 60;
 
 
     private static boolean [] keys = new boolean[6];
@@ -37,16 +38,8 @@ public class Game implements Runnable{
         this.gc = gc;
         this.controller = controller;
         speed = 50;
-        System.out.println("Nowa gra z nickiem " + nickname + " oraz z levelem " + difficultyLevel);
     }
 
-    public boolean isRunning() {
-        return isRunning;
-    }
-
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
 
     @Override
     public void run() {
@@ -56,49 +49,51 @@ public class Game implements Runnable{
             render(gc);
             for(int i = 0;i<speed; i++){
                 try {
-                    Thread.sleep(4);
+                    Thread.sleep(2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                for(int j=0;j < keys.length;j++){
+                for(int j=0;j < RATE; j++){
                     if(keys[0]){ //lewo
-                        System.out.println("lewo");
                         if( !board.collides(shape.move(-1))){
                             shape.setTiles(shape.move(-1));
                         }
                         keys[0] = false;
+                        render(gc);
                     }
                     else if(keys[1]){ //prawo
-                        System.out.println("prawo");
                         if( !board.collides(shape.move(1))){
                             shape.setTiles(shape.move(1));
                         }
                         keys[1] = false;
+                        render(gc);
                     }
                     else if(keys[2]){ //esc
                         keys[2] = false;
+                        render(gc);
                     }
                     else if(keys[3]){ //spacja
                         while(!board.collides(shape.fall())){
                             shape.setTiles(shape.fall());
                         }
                         keys[3] = false;
+                        render(gc);
                     }
                     else if(keys[4]){ //obrot w prawo
-                        //System.out.println("obrot w prawo");
                         if( !board.collides(shape.rotate(1))){
                             shape.setTiles(shape.rotate(1));
                             shape.setRotation(shape.getRotation() + 1);
                         }
                         keys[4] = false;
+                        render(gc);
                     }
                     else if(keys[5]){ //obrot w lewo
-                        //System.out.println("obrot w lewo");
                         if( !board.collides(shape.rotate(-1))){
                             shape.setTiles(shape.rotate(-1));
                             shape.setRotation(shape.getRotation() - 1);
                         }
                         keys[5] = false;
+                        render(gc);
                     }
                 }
             }
@@ -106,20 +101,17 @@ public class Game implements Runnable{
             if(board.collides(shape.fall())){
                 board.fixShapeToTheBoard(shape.getTiles());
                 shape = generateRandomShape(origin);
-                //System.out.println(shape.getTiles()[0].getxPos());
             } else {
                shape.setTiles(shape.fall());
             }
             if(board.checkIfGameFinished()){
                 controller.setMessage("Game over! Click start button to play again!");
-                System.out.println("Koniec gry");
                 return;
             }
             points += board.clearRows();
             controller.setPoints(points);
 
         }
-        System.out.println("koniec");
         return;
     }
 
@@ -156,11 +148,11 @@ public class Game implements Runnable{
 
     private void setDifficulty(String diff){
         if(diff=="Easy"){
-            speed = 80;
+            speed = 160;
         } else if(diff=="Medium"){
-            speed = 60;
+            speed = 120;
         } else if(diff=="Hard"){
-            speed = 40;
+            speed = 80;
         }
     }
 
@@ -233,7 +225,7 @@ public class Game implements Runnable{
 
             highscores = (List<Score>) in.readObject();
 
-            System.out.println("z load: " + highscores.size());
+            //System.out.println("z load: " + highscores.size());
             in.close();
             fileIn.close();
 
@@ -251,14 +243,4 @@ public class Game implements Runnable{
             e.printStackTrace();
         }
     }
-
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
 }
